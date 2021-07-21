@@ -1,35 +1,28 @@
 radio.onReceivedValue(function (name, value) {
     if (name == "x") {
-        l_r = value
+        // von -1023 bis 1023
+        // zu
+        // -100 bis 100
+        l_r = Math.round(value / 11)
     }
     if (name == "y") {
-        speed = value
+        // von -1023 bis 1023
+        // zu
+        // -100 bis 100
+        speed = Math.round(value / 11)
     }
-    // von -1023 bis 1023
-    // zu
-    // -100 bis 100
-    l_r = Math.round(l_r / 11)
-    // von -1023 bis 1023
-    // zu
-    // -100 bis 100
-    speed = Math.round(speed / 11)
-    if (l_r < -10) {
-        basic.showIcon(IconNames.ArrowEast)
+    if (l_r < -20) {
         calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, -1 * l_r)
         calliBot2.motor(C2Motor.links, C2Dir.vorwärts, -0.25 * l_r)
-    } else if (l_r > 10) {
-        basic.showIcon(IconNames.ArrowWest)
+    } else if (l_r > 20) {
         calliBot2.motor(C2Motor.links, C2Dir.vorwärts, l_r)
         calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 0.25 * l_r)
     } else {
-        if (speed < -10) {
-            basic.showIcon(IconNames.ArrowSouth)
+        if (speed < -20) {
             calliBot2.motor(C2Motor.beide, C2Dir.vorwärts, -1 * speed)
-        } else if (speed > 10) {
-            basic.showIcon(IconNames.ArrowNorth)
+        } else if (speed > 20) {
             calliBot2.motor(C2Motor.beide, C2Dir.rückwärts, speed)
         } else {
-            basic.showIcon(IconNames.No)
             calliBot2.motorStop(C2Motor.beide, C2Stop.Frei)
         }
     }
