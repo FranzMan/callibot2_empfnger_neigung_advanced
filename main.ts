@@ -5,72 +5,36 @@ radio.onReceivedValue(function (name, value) {
     if (name == "y") {
         speed = value
     }
-    l_r = Math.round(pins.map(
-    l_r,
-    -1023,
-    1023,
-    -100,
-    100
-    ))
-    speed = Math.round(pins.map(
-    speed,
-    -1023,
-    1023,
-    -100,
-    100
-    ))
-    if (l_r < -60) {
-        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 50)
-        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, 0)
-        basic.showLeds(`
-            . . . . #
-            . . . . #
-            . . . . #
-            . . . . #
-            . . . . #
-            `)
-    } else if (l_r < -20) {
-        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 50)
-        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, 25)
-        basic.showLeds(`
-            . . . # .
-            . . . # .
-            . . . # .
-            . . . # .
-            . . . # .
-            `)
-    } else if (l_r < 20) {
-        basic.showLeds(`
-            . . # . .
-            . . # . .
-            . . # . .
-            . . # . .
-            . . # . .
-            `)
-        calliBot2.motor(C2Motor.beide, C2Dir.vorwärts, 50)
-    } else if (l_r < 60) {
-        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, 50)
-        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 25)
-        basic.showLeds(`
-            . # . . .
-            . # . . .
-            . # . . .
-            . # . . .
-            . # . . .
-            `)
+    // von -1023 bis 1023
+    // zu
+    // -100 bis 100
+    l_r = Math.round(l_r / 11)
+    // von -1023 bis 1023
+    // zu
+    // -100 bis 100
+    speed = Math.round(speed / 11)
+    if (l_r < -10) {
+        basic.showIcon(IconNames.ArrowEast)
+        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, -1 * l_r)
+        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, -0.25 * l_r)
+    } else if (l_r > 10) {
+        basic.showIcon(IconNames.ArrowWest)
+        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, l_r)
+        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 0.25 * l_r)
     } else {
-        calliBot2.motor(C2Motor.links, C2Dir.vorwärts, 50)
-        calliBot2.motor(C2Motor.rechts, C2Dir.vorwärts, 0)
-        basic.showLeds(`
-            # . . . .
-            # . . . .
-            # . . . .
-            # . . . .
-            # . . . .
-            `)
+        if (speed < -10) {
+            basic.showIcon(IconNames.ArrowSouth)
+            calliBot2.motor(C2Motor.beide, C2Dir.vorwärts, -1 * speed)
+        } else if (speed > 10) {
+            basic.showIcon(IconNames.ArrowNorth)
+            calliBot2.motor(C2Motor.beide, C2Dir.rückwärts, speed)
+        } else {
+            basic.showIcon(IconNames.No)
+            calliBot2.motorStop(C2Motor.beide, C2Stop.Frei)
+        }
     }
 })
 let speed = 0
 let l_r = 0
-music.playTone(131, music.beat(BeatFraction.Whole))
+music.playTone(131, music.beat(BeatFraction.Sixteenth))
 radio.setGroup(13)
